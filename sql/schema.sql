@@ -30,6 +30,3 @@ CREATE TABLE orders (
     FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
-select count(*) from customers;
-select count(*) from orders;
-select count(*) from products;
