@@ -286,3 +286,5 @@ SELECT COUNT(*) AS total_orders FROM orders;
 SELECT SUM(discount_pct IS NULL) AS missing_discounts,
        SUM(rating IS NULL) AS missing_ratings
 FROM orders;
+
+
