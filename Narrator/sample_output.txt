@@ -1,0 +1,8 @@
+Situation
+Regional operations and finance reviews show a raw total revenue of 99,860.2 INR, which settles at a cleaned total revenue of 97,358.3 INR after accounting for a duplicate reconciliation delta of 2,501.9 INR. Across payment methods, return rates stand at 44.4 percent for COD, 14.7 percent for CARD, and 18.9 percent for UPI. 
+
+Complication
+Data anomalies distorted seasonal visibility, most notably in January 2026, where an apparent revenue of 29,582.1 INR dropped to a corrected revenue of 11,637.1 INR. Furthermore, the highest-risk segment is concentrated in Tier 2 cities using COD, carrying a severe return rate of 54.5 percent. These elevated returns threaten regional margins and complicate cash flow forecasting.
+
+Resolution
+To stabilize regional ops and finance metrics, proposed actions include tightening verification protocols for Tier 2 COD orders and addressing the structural drivers behind the 44.4 percent COD return rate. With the distortions in January 2026 resolved, performance tracking confirms March 2026 as the true peak month, generating 20,318.9 INR in verified revenue. Leadership should anchor future operational targets and financial planning around these cleaned baselines to protect working capital.
