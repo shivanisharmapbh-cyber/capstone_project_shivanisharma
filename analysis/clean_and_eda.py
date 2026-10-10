@@ -26,7 +26,7 @@ for filename in ["customers.csv", "products.csv", "orders.csv"]:
     file_content = next(iter(uploaded.values()))
     (data_dir / filename).write_bytes(file_content)
 
-    print(f"Saved: data/{filename}")
+    #print(f"Saved: data/{filename}")
 
 import pandas as pd
 
@@ -36,30 +36,30 @@ customers = pd.read_csv("data/customers.csv")
 products = pd.read_csv("data/products.csv")
 
 # Display dataset dimensions before cleaning.
-print("Orders:", orders.shape)
-print("Customers:", customers.shape)
-print("Products:", products.shape)
+#print("Orders:", orders.shape)
+#print("Customers:", customers.shape)
+#print("Products:", products.shape)
 
 # Inspect the first five records from each dataset.
-print("\nOrders preview:")
-print(orders.head())
+#print("\nOrders preview:")
+#print(orders.head())
 
-print("\nCustomers preview:")
-print(customers.head())
+#print("\nCustomers preview:")
+#print(customers.head())
 
-print("\nProducts preview:")
-print(products.head())
+#print("\nProducts preview:")
+#print(products.head())
 
 """## Task 2 — Standardize Payment Method Labels
 ### Payment method labels are inspected for inconsistent capitalization. Leading and trailing spaces are removed, and all labels are converted to uppercase to ensure consistent grouping in subsequent analysis.
 """
 
 # Inspect payment methods before standardization.
-print("Payment methods before standardization:")
-print(orders["payment_method"].unique())
+#print("Payment methods before standardization:")
+#print(orders["payment_method"].unique())
 
-print("\nNumber of distinct values before:")
-print(orders["payment_method"].nunique())
+#print("\nNumber of distinct values before:")
+#print(orders["payment_method"].nunique())
 
 # Remove surrounding spaces and standardize capitalization.
 orders["payment_method"] = (
@@ -67,14 +67,14 @@ orders["payment_method"] = (
 )
 
 # Verify the standardized labels and their counts.
-print("\nPayment methods after standardization:")
-print(orders["payment_method"].unique())
+#print("\nPayment methods after standardization:")
+#print(orders["payment_method"].unique())
 
-print("\nNumber of distinct values after:")
-print(orders["payment_method"].nunique())
+#print("\nNumber of distinct values after:")
+#print(orders["payment_method"].nunique())
 
-print("\nOrder count by payment method:")
-print(orders["payment_method"].value_counts())
+#print("\nOrder count by payment method:")
+#print(orders["payment_method"].value_counts())
 
 """# Task 3 — Identify and Remove Duplicate Orders
 ### Duplicate orders are identified using all order attributes except order_id, since duplicate transactions have different order IDs. The first occurrence is retained, and subsequent duplicates are removed. The excluded records are preserved separately for revenue reconciliation.
@@ -101,16 +101,16 @@ duplicate_mask = orders.duplicated(
 # Preserve dropped rows for the revenue reconciliation in Task 5.
 dropped_orders = orders.loc[duplicate_mask].copy()
 
-print("Number of duplicate orders:", duplicate_mask.sum())
+#print("Number of duplicate orders:", duplicate_mask.sum())
 
-print("\nDropped order IDs:")
-print(dropped_orders["order_id"].to_string(index=False))
+#print("\nDropped order IDs:")
+#print(dropped_orders["order_id"].to_string(index=False))
 
 # Create a separate dataset containing only retained orders.
 orders_clean = orders.loc[~duplicate_mask].copy()
 
-print("\nDataset dimensions after removing duplicates:")
-print(orders_clean.shape)
+#print("\nDataset dimensions after removing duplicates:")
+#print(orders_clean.shape)
 
 """# Task 4 — Handle Missing Discounts and Ratings
 ### Missing values are counted after duplicate removal. Missing discounts are replaced with 0%, following the business rule that no promotion was applied. Missing ratings are replaced with the median of the available ratings. The affected row counts and remaining missing values are printed to verify the changes.
@@ -120,12 +120,12 @@ print(orders_clean.shape)
 missing_discounts = orders_clean["discount_pct"].isnull().sum()
 missing_ratings = orders_clean["rating"].isnull().sum()
 
-print("Missing discounts before imputation:", missing_discounts)
-print("Missing ratings before imputation:", missing_ratings)
+#print("Missing discounts before imputation:", missing_discounts)
+#print("Missing ratings before imputation:", missing_ratings)
 
 # Calculate and display the median before filling missing ratings.
 median_rating = orders_clean["rating"].median()
-print("Median rating before imputation:", median_rating)
+#print("Median rating before imputation:", median_rating)
 
 # Fill missing discounts and ratings.
 orders_clean["discount_pct"] = (
@@ -136,12 +136,12 @@ orders_clean["rating"] = (
     orders_clean["rating"].fillna(median_rating)
 )
 
-print("\nDiscount rows filled:", missing_discounts)
-print("Rating rows filled:", missing_ratings)
+#print("\nDiscount rows filled:", missing_discounts)
+#print("Rating rows filled:", missing_ratings)
 
 # Verify that both columns contain no missing values.
-print("\nMissing values after imputation:")
-print(orders_clean[["discount_pct", "rating"]].isnull().sum())
+#print("\nMissing values after imputation:")
+#print(orders_clean[["discount_pct", "rating"]].isnull().sum())
 
 """# Task 5 — Merge Datasets and Reconcile Revenue
 The cleaned orders are merged with product and customer details to calculate revenue after discounts. The raw revenue and the revenue associated with removed duplicates are calculated independently to explain the difference between the raw and cleaned totals.
@@ -167,8 +167,8 @@ merged["order_value"] = (
 
 cleaned_total = merged["order_value"].sum()
 
-print("Cleaned order count:", len(merged))
-print(f"Cleaned total revenue: ₹{cleaned_total:,.2f}")
+#print("Cleaned order count:", len(merged))
+#print(f"Cleaned total revenue: ₹{cleaned_total:,.2f}")
 
 # Independently calculate revenue from all 180 original orders.
 raw_revenue = orders.merge(
@@ -197,22 +197,22 @@ duplicate_revenue["order_value"] = (
 duplicate_total = duplicate_revenue["order_value"].sum()
 revenue_difference = raw_total - cleaned_total
 
-print("\nRevenue of removed duplicate orders:")
-print(
+#print("\nRevenue of removed duplicate orders:")
+#print(
     duplicate_revenue[["order_id", "order_value"]].to_string(
         index=False,
         float_format=lambda value: f"{value:.2f}"
     )
 )
 
-print(f"\nRaw total revenue: ₹{raw_total:,.2f}")
-print(f"Removed duplicate revenue: ₹{duplicate_total:,.2f}")
-print(f"Raw minus cleaned revenue: ₹{revenue_difference:,.2f}")
+#print(f"\nRaw total revenue: ₹{raw_total:,.2f}")
+#print(f"Removed duplicate revenue: ₹{duplicate_total:,.2f}")
+#print(f"Raw minus cleaned revenue: ₹{revenue_difference:,.2f}")
 
 assert round(revenue_difference, 2) == round(duplicate_total, 2)
 
 # Print the reconciliation explanation as part of the script output.
-print(
+#print(
     f"\nRevenue reconciliation: The raw CSV revenue of ₹{raw_total:,.2f} "
     f"corresponds to the total in Part 1 Report (a). After removing "
     f"{len(dropped_orders)} duplicate orders, revenue is "
@@ -237,11 +237,11 @@ IQR = Q3 - Q1
 lower = Q1 - 1.5 * IQR
 upper = Q3 + 1.5 * IQR
 
-print("Q1:", Q1)
-print("Q3:", Q3)
-print("IQR:", IQR)
-print("Lower bound:", lower)
-print("Upper bound:", upper)
+#print("Q1:", Q1)
+#print("Q3:", Q3)
+#print("IQR:", IQR)
+#print("Lower bound:", lower)
+#print("Upper bound:", upper)
 
 # Flag outliers without removing them from the merged dataset.
 merged["is_outlier"] = (
@@ -254,18 +254,18 @@ outliers = merged.loc[
     ["order_id", "order_date", "quantity"]
 ]
 
-print("\nNumber of outlier orders:", len(outliers))
-print("\nOutlier orders:")
-print(outliers.to_string(index=False))
+#print("\nNumber of outlier orders:", len(outliers))
+#print("\nOutlier orders:")
+#print(outliers.to_string(index=False))
 
-print("\nTotal orders retained:", len(merged))
+#print("\nTotal orders retained:", len(merged))
 
 """# Task 7 — Compare Return Rates Across Payment Methods
 The hypothesis is that cash-on-delivery (COD) orders have a higher return rate than Card and UPI orders. Order counts and average return indicators are calculated for each payment method. Since returned orders are coded as 1 and non-returned orders as 0, the mean represents the return rate.
 """
 
 # State the hypothesis explicitly in the output.
-print(
+#print(
     "Hypothesis: COD orders have a higher return rate "
     "than Card and UPI orders."
 )
@@ -280,8 +280,8 @@ payment_summary["return_rate_pct"] = (
     payment_summary["mean"] * 100
 )
 
-print("\nReturn rates by payment method:")
-print(
+#print("\nReturn rates by payment method:")
+#print(
     payment_summary.to_string(
         formatters={
             "mean": "{:.4f}".format,
@@ -296,12 +296,12 @@ card_rate = payment_summary.loc["CARD", "mean"]
 upi_rate = payment_summary.loc["UPI", "mean"]
 
 if cod_rate > card_rate and cod_rate > upi_rate:
-    print(
+    #print(
         "\nHypothesis: Confirmed. "
         "COD has the highest observed return rate in this dataset."
     )
 else:
-    print(
+    #print(
         "\nHypothesis: Not confirmed. "
         "COD does not have a higher return rate than both alternatives."
     )
@@ -320,8 +320,8 @@ segment_summary["return_rate_pct"] = (
     segment_summary["mean"] * 100
 )
 
-print("Return rates by payment method and city tier:")
-print(
+#print("Return rates by payment method and city tier:")
+#print(
     segment_summary[["count", "return_rate_pct"]].to_string(
         formatters={"return_rate_pct": "{:.1f}%".format}
     )
@@ -335,7 +335,7 @@ highest_rate = segment_summary.loc[
 
 payment_method, city_tier = highest_segment
 
-print(
+#print(
     f"\nHighest-risk segment: {payment_method} + "
     f"Tier-{city_tier} cities at {highest_rate:.1f}%."
 )
@@ -348,7 +348,7 @@ tier2_count = int(cod_segments.loc[2, "count"])
 tier1_rate = cod_segments.loc[1, "return_rate_pct"]
 tier2_rate = cod_segments.loc[2, "return_rate_pct"]
 
-print(
+#print(
     f"\nCOD comparison: Tier-1 cities have {tier1_count} orders "
     f"with a {tier1_rate:.1f}% return rate, while Tier-2 cities "
     f"have {tier2_count} orders with a {tier2_rate:.1f}% return rate. "
@@ -372,8 +372,8 @@ correlation_columns = [
 
 correlation_matrix = merged[correlation_columns].corr()
 
-print("Pearson correlation matrix:")
-print(correlation_matrix.round(3).to_string())
+#print("Pearson correlation matrix:")
+#print(correlation_matrix.round(3).to_string())
 
 # Classify strength using the absolute, unrounded correlation.
 def correlation_strength(value):
@@ -389,35 +389,35 @@ def correlation_strength(value):
         return "strong"
 
 # Print all six unique pairwise correlations and their classifications.
-print("\nPairwise correlation strengths:")
+#print("\nPairwise correlation strengths:")
 
 for first, second in combinations(correlation_columns, 2):
     value = correlation_matrix.loc[first, second]
     strength = correlation_strength(value)
 
-    print(f"{first} vs {second}: r = {value:.3f} — {strength}")
+    #print(f"{first} vs {second}: r = {value:.3f} — {strength}")
 
 # Evaluate the discount-return hypothesis.
 discount_return_corr = correlation_matrix.loc[
     "discount_pct", "returned"
 ]
 
-print("\nHypothesis: Higher discounts reduce returns.")
+#print("\nHypothesis: Higher discounts reduce returns.")
 
 if abs(discount_return_corr) < 0.2:
-    print(
+    #print(
         f"Hypothesis: Busted. The correlation between discount percentage "
         f"and returns is {discount_return_corr:.3f}, indicating a negligible "
         "linear relationship. This analysis does not support the claim "
         "that higher discounts reduce returns."
     )
 else:
-    print(
+    #print(
         f"The observed correlation is {discount_return_corr:.3f}; "
         "review its direction and strength before drawing a conclusion."
     )
 
-print("Correlation alone does not establish causation.")
+#print("Correlation alone does not establish causation.")
 
 """# Task 10 — Evaluate the Impact of Bulk Orders on Monthly Revenue
 Order dates are converted to datetime and grouped by year and month. Monthly revenue is calculated both including and excluding the quantity outliers identified in Task 6. The two series are compared to determine whether unusually large orders influence the apparent peak month.
@@ -442,19 +442,19 @@ monthly_revenue_corrected = (
     .sort_index()
 )
 
-print("Monthly revenue including quantity outliers (₹):")
-print(monthly_revenue_all.to_string(float_format="{:.2f}".format))
+#print("Monthly revenue including quantity outliers (₹):")
+#print(monthly_revenue_all.to_string(float_format="{:.2f}".format))
 
-print("\nMonthly revenue excluding quantity outliers (₹):")
-print(
+#print("\nMonthly revenue excluding quantity outliers (₹):")
+#print(
     monthly_revenue_corrected.to_string(
         float_format="{:.2f}".format
     )
 )
 
 # Display the bulk orders responsible for the difference.
-print("\nFlagged bulk orders:")
-print(
+#print("\nFlagged bulk orders:")
+#print(
     merged.loc[
         merged["is_outlier"],
         ["order_id", "order_date", "quantity", "order_value"]
@@ -465,18 +465,18 @@ print(
 peak_all = monthly_revenue_all.idxmax()
 peak_corrected = monthly_revenue_corrected.idxmax()
 
-print(
+#print(
     f"\nPeak including outliers: {peak_all} "
     f"(₹{monthly_revenue_all.loc[peak_all]:,.2f})"
 )
 
-print(
+#print(
     f"Peak excluding outliers: {peak_corrected} "
     f"(₹{monthly_revenue_corrected.loc[peak_corrected]:,.2f})"
 )
 
 # Explain the effect of the January bulk orders.
-print(
+#print(
     "\nFinding: January's apparent revenue lead is an artifact of "
     "two bulk orders: O0011 on 2026-01-28 (25 units) and O0098 "
     "on 2026-01-10 (30 units). Once these orders are excluded, "
