@@ -85,8 +85,8 @@ return_rates = (
     .sort_values(ascending=False)
 )
 
-print("Return rates by payment method:")
-print(return_rates.to_string(float_format=lambda x: f"{x:.1f}%"))
+#print("Return rates by payment method:")
+#print(return_rates.to_string(float_format=lambda x: f"{x:.1f}%"))
 
 fig, ax = plt.subplots(figsize=(8, 5))
 
@@ -122,7 +122,7 @@ bar_path = output_dir / "return_rate_by_payment.png"
 fig.savefig(bar_path, dpi=200, bbox_inches="tight")
 plt.close(fig)
 
-print(f"Saved: {bar_path}")
+#print(f"Saved: {bar_path}")
 
 # Chart 2 — Show monthly revenue excluding quantity outliers.
 merged["order_date"] = pd.to_datetime(merged["order_date"])
@@ -135,8 +135,8 @@ monthly_revenue = (
     .sort_index()
 )
 
-print("\nOutlier-corrected monthly revenue (INR):")
-print(monthly_revenue.to_string(float_format="{:.2f}".format))
+#print("\nOutlier-corrected monthly revenue (INR):")
+#print(monthly_revenue.to_string(float_format="{:.2f}".format))
 
 peak_month = monthly_revenue.idxmax()
 peak_label = peak_month.to_timestamp().strftime("%B %Y")
@@ -181,4 +181,4 @@ line_path = output_dir / "monthly_revenue_trend.png"
 fig.savefig(line_path, dpi=200, bbox_inches="tight")
 plt.close(fig)
 
-print(f"Saved: {line_path}")
+#print(f"Saved: {line_path}")
