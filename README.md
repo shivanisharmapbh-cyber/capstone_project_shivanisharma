@@ -30,7 +30,7 @@ The offline narrator does not require the Gemini library.
 
 ## 1. Load the SQL Data and Run Reports
 
-Connect to your MySQL server in MySQL Workbench.
+connect to MYSQL using MYSQL Workbench.
 
 Create and select the project database:
 
@@ -60,13 +60,13 @@ The raw order report should show:
 - Total revenue: INR 99,860.20
 - Average order value: INR 554.78
 
-The rating-count report should show 180 orders, 165 available ratings,
-and 15 missing ratings. Report outputs are recorded as comments above
-their queries in `sql/reports.sql`.
+The rating-count report should show 180 orders, with 165 ratings,
+and 15 missing ratings. the results are written as comments above each
+query in sql/reports.sql.
 
-Run the schema against a fresh database for the initial setup. If the
-reports have already added `loyalty_tier`, do not repeat that
-`ALTER TABLE` statement against the same table.
+for the first setup, run schema.sql in a new database.
+if the loyalty_tier column is already added, do not
+run the alter table statement again.
 
 ## 2. Run the Python Analysis and Visualizations
 
@@ -103,11 +103,10 @@ including:
 - Six pairwise correlations classified as negligible
 - Corrected peak month: March 2026, at INR 20,318.90
 
-Part 2 Task 5 calculates the revenue reconciliation used in
-`narrator/findings.json`. The export step at the end of
-`analysis/clean_and_eda.py` writes this file automatically, combining
-the Task 5 results with the subsequent segmentation and monthly
-revenue findings. The JSON is not maintained manually.
+Part 2 Task 5 checks the revenue totals. the analysis/
+clean_and_eda.py script automatically saves these results,
+along with segment and monthly revenue findings, in narrator/
+findings.json.
 
 The visualization script regenerates:
 
@@ -118,9 +117,9 @@ The monthly chart excludes the two flagged quantity outliers.
 Running both scripts again with unchanged CSVs reproduces the same
 analysis results and charts.
 
-## 3. Generate the Business Narrative
+## 3. Turn findings into a business story
 
-The narrator reads `narrator/findings.json` and produces three sections:
+The narrator reads `narrator/findings.json` and tell the story in three parts:
 Situation, Complication, and Resolution.
 
 ### Offline Mode
